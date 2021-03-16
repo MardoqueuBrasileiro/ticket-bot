@@ -2,8 +2,8 @@
     "Bot_Token": "TOKEN DO BOT AQUI",
     "Bot_prefix": "!",
     "Cor_Bot": "#ffff",
-    "Mensagen_Ticket": "Reaja a 🎫 para abrir um ticket!",
-    "Emoji_Abrir_Ticket": "🎫",
+    "Mensagen_Ticket": "Reaja a ✉️ para abrir um ticket!",
+    "Emoji_Abrir_Ticket": "✉️",
     "Cargo_Suporte_ID": "ID CARGO SUPORTE",
     "Categoria_Tickets_ID": "ID CATEGORIA DOS TICKETS"
 }
