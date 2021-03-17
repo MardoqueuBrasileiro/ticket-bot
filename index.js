@@ -28,7 +28,7 @@ client.on('message', async message => {
                     if (reaction.message.channel.id == message.channel.id) {
                         if (reaction.emoji.name === emoji) {
                                 type: 'text',
-                                parent: ticket_caotgory_ID,
+                                parent: Categoria_Tickets_ID,
                                 permissionOverwrites: [{
                                     id: user.id,
                                     allow: ['VIEW_CHANNEL', "SEND_MESSAGES", "READ_MESSAGE_HISTORY"]
