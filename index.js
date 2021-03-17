@@ -1,5 +1,5 @@
 const { Client, MessageEmbed } = require('discord.js');
-const {Bot_Token, Bot_prefix, Mensagen_Ticket, Emoji_Abrir_Ticket, Categoria_Tickets_ID, Cargo_Suporte_ID, Cor_Bot} = require('./config/config.json');
+const {Bot_Token, Bot_Prefix, Mensagen_Ticket, Emoji_Abrir_Ticket, Categoria_Tickets_ID, Cargo_Suporte_ID, Cor_Bot} = require('./config/config.json');
 const client = new Client({partials: ["CHANNEL", "REACTION", "MESSAGE"]});
 const channels = new Set();
 const map = new Map();
@@ -10,15 +10,15 @@ client.on("ready", () => {
 });
 
 client.on('message', async message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(Bot_Prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLocaleLowerCase();
 
     
 
     if (command === 'msg-ticket') {
-        message.channel.send(ticket_start_message).then((m) => {
-            m.react(emoji).then(() => {
+        message.channel.send(Mensagen_Ticket).then((m) => {
+            m.react(Emoji_Abrir_Ticket).then(() => {
                 client.on("messageReactionAdd", async(reaction, user) => {
                     if (reaction.message.partial) await reaction.message.fetch();
                     if (reaction.partial) await reaction.fetch();
@@ -44,7 +44,7 @@ client.on('message', async message => {
                                 })
                                 channels.add(c.id);
                                 const openTicket = new MessageEmbed()
-                                    .setColor(main_color)
+                                    .setColor(Cor_Bot)
                                     .setDescription(`O suporte estará com você em breve.
 									Para fechar este ticket use o comando **!close**`)
                                 c.send(`<@${user.id}> Bem-vindo(a)`, openTicket).then(() => {
@@ -120,7 +120,7 @@ client.on('message', async message => {
 
     if (command === 'help') {
         const helpEmbed = new MessageEmbed()
-            .setColor(main_color)
+            .setColor(Cor_Bot)
             .setTitle('Discord ticket bot')
             .setDescription('Comandos:')
             .addField("`!close` - Fechar um ticket.")
@@ -164,4 +164,4 @@ client.on('message', async message => {
     
 })
  
-client.login(token);
+client.login(Bot_Token);
