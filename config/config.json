@@ -1,6 +1,6 @@
 {
     "Bot_Token": "TOKEN DO BOT AQUI",
-    "Bot_prefix": "!",
+    "Bot_Prefix": "!",
     "Cor_Bot": "#ffff",
     "Mensagen_Ticket": "Reaja a ✉️ para abrir um ticket!",
     "Emoji_Abrir_Ticket": "✉️",
