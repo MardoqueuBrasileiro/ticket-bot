@@ -1,32 +1,29 @@
 const { Client, MessageEmbed } = require('discord.js');
-const {Bot_Token, Bot_Prefix, Mensagen_Ticket, Emoji_Abrir_Ticket, Categoria_Tickets_ID, Cargo_Suporte_ID, Cor_Bot} = require('./config/config.json');
+const {Bot_Token, Bot_Prefix, Mensagen_Abrir_Ticket, Mensagen_Fechar_Ticket, Emoji_Abrir_Ticket, Categoria_Tickets_ID, Cargo_Suporte_ID, Cor_Bot, Nome_Bot} = require('./config/config.json');
 const client = new Client({partials: ["CHANNEL", "REACTION", "MESSAGE"]});
 const channels = new Set();
 const map = new Map();
 client.on("ready", () => {
-    console.log("Discord ticket bot foi ligado com sucesso!");
-    console.log("");
-    console.log("Discord ticket bot - https://github.com/Raggzinn/DC-ticket-bot");
+    console.log("Ligado!");
+    client.user.setActivity('💻 Bot feito por Raggzinn#0001')
 });
-
 client.on('message', async message => {
     if (!message.content.startsWith(Bot_Prefix) || message.author.bot) return;
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const args = message.content.slice(Bot_Prefix.length).trim().split(/ +/g);
     const command = args.shift().toLocaleLowerCase();
 
-    
-
     if (command === 'msg-ticket') {
-        message.channel.send(Mensagen_Ticket).then((m) => {
+        message.channel.send(Mensagen_Abrir_Ticket).then((m) => {
             m.react(Emoji_Abrir_Ticket).then(() => {
-                client.on("messageReactionAdd", async(reaction, user) => {
+                client.on("messageReactionAdd", async (reaction, user) => {
                     if (reaction.message.partial) await reaction.message.fetch();
                     if (reaction.partial) await reaction.fetch();
                     if (user.bot) return;
                     if (!reaction.message.guild) return;
 
                     if (reaction.message.channel.id == message.channel.id) {
-                        if (reaction.emoji.name === emoji) {
+                        if (reaction.emoji.name === Emoji_Abrir_Ticket) {
+                            reaction.message.guild.channels.create(`${user.username}-Ticket`, {
                                 type: 'text',
                                 parent: Categoria_Tickets_ID,
                                 permissionOverwrites: [{
@@ -36,17 +33,17 @@ client.on('message', async message => {
                                     id: reaction.message.guild.roles.cache.find(role => role.name === '@everyone').id,
                                     deny: ['SEND_MESSAGES', "VIEW_CHANNEL"]
                                 }, {
-                                    id: support_team_role,
+                                    id: Cargo_Suporte_ID,
                                     allow: ['SEND_MESSAGES', "VIEW_CHANNEL", "READ_MESSAGE_HISTORY"]
-                                }].then(c => {
+                                }]
+                            }).then(c => {
                                 map.set(user.id, {
                                     channel: c.id
                                 })
                                 channels.add(c.id);
                                 const openTicket = new MessageEmbed()
                                     .setColor(Cor_Bot)
-                                    .setDescription(`O suporte estará com você em breve.
-									Para fechar este ticket use o comando **!close**`)
+                                    .setDescription(Mensagen_Fechar_Ticket)
                                 c.send(`<@${user.id}> Bem-vindo(a)`, openTicket).then(() => {
                                 })
                                 reaction.users.remove(user.id);
@@ -70,7 +67,7 @@ client.on('message', async message => {
 
     if (command === 'add') {
         if (!channels.has(message.channel.id)) return console.log('ca')
-        if (!message.member.roles.cache.has(support_team_role)) return message.reply('Somente suportes podem usar este comando!');
+        if (!message.member.roles.cache.has(Cargo_Suporte_ID)) return message.reply('Somente suportes podem usar este comando!');
       const userAdd = args[0];
       
       if (message.guild.roles.cache.get(userAdd)) {
@@ -95,7 +92,7 @@ client.on('message', async message => {
     if (command === 'remove') {
     
         if (!channels.has(message.channel.id)) return console.log('ca')
-        if (!message.member.roles.cache.has(support_team_role)) return message.reply('Somente suportes podem usar este comando!');
+        if (!message.member.roles.cache.has(Cargo_Suporte_ID)) return message.reply('Somente suportes podem usar este comando!');
       const userAdd = args[0];
       
       if (message.guild.roles.cache.get(userAdd)) {
@@ -121,14 +118,8 @@ client.on('message', async message => {
     if (command === 'help') {
         const helpEmbed = new MessageEmbed()
             .setColor(Cor_Bot)
-            .setTitle('Discord ticket bot')
-            .setDescription('Comandos:')
-            .addField("`!close` - Fechar um ticket.")
-            .addField("`!add` - Adicionar um usuario ao ticket.")
-            .addField("`!remove` - Remover um usuario do ticket.")
-            .addField("`!id` - Mostra o ID do cargo/canal/usuario mencionado.")
-            .addField("`!help` - Mostrar a lista de comandos do bot.")
-            .addField("`!msg-ticket` - Enviar a mensagem com a reação para abir ticket.")
+            .setTitle(Nome_Bot)
+            .setDescription("`!close` - Fechar um ticket.\n`!add` - Adicionar um usuario ao ticket.\n`!remove` - Remover um usuario do ticket.\n`!id` - Mostra o ID do cargo/canal/usuario mencionado.\n`!help` - Mostrar a lista de comandos do bot.\n`!msg-ticket` - Enviar a mensagem com a reação para abir ticket.")
             .setFooter("https://github.com/Raggzinn/DC-ticket-bot")
 
         message.channel.send(helpEmbed)
@@ -136,7 +127,7 @@ client.on('message', async message => {
 
     if (command === 'rename') {
         if (!channels.has(message.channel.id)) return;
-        if (message.member.roles.cache.has(support_team_role)) {
+        if (message.member.roles.cache.has(Cargo_Suporte_ID)) {
             if (!args.length) return message.channel.send('Nenhum nome foi dado')
             message.channel.setName(args.join(" "))
             message.channel.send(`Renomeou o ticket para: ${args.join(" ")}`)
