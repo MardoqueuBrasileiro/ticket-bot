@@ -2,7 +2,9 @@
     "Bot_Token": "TOKEN DO BOT AQUI",
     "Bot_Prefix": "!",
     "Cor_Bot": "#ffff",
-    "Mensagen_Ticket": "Reaja a ✉️ para abrir um ticket!",
+    "Nome_Bot": "Discord ticket bot",
+    "Mensagen_Abrir_Ticket": "Reaja a ✉️ para abrir um ticket!",
+    "Mensagen_Fechar_Ticket": "Você ja sera atendido...\nPara fechar o ticket use **!close**",
     "Emoji_Abrir_Ticket": "✉️",
     "Cargo_Suporte_ID": "ID CARGO SUPORTE",
     "Categoria_Tickets_ID": "ID CATEGORIA DOS TICKETS"
